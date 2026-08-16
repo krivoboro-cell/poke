@@ -25,9 +25,12 @@ h1{font-size:25px;line-height:1.2;margin:0 0 8px;}
 font-size:15px;color:var(--green-deep);}
 .btn{display:block;text-align:center;background:var(--green);color:#fff;text-decoration:none;
 padding:16px 22px;border-radius:12px;font-weight:600;font-size:17px;margin-bottom:14px;}
-.btn2{display:block;text-align:center;background:transparent;color:var(--green-deep);
-text-decoration:none;padding:14px 22px;border:1px solid var(--line);border-radius:12px;
-font-weight:600;font-size:15px;margin-bottom:20px;}
+/* Вторая кнопка стоит сразу под скачиванием и обведена в цвет: покупатель
+   открывает файл в новой вкладке и, вернувшись, должен сразу видеть выход
+   на сайт. Внизу под серым абзацем её не замечают - проверено 16.08.2026. */
+.btn2{display:block;text-align:center;background:var(--green-tint);color:var(--green-deep);
+text-decoration:none;padding:15px 22px;border:1.5px solid var(--green);border-radius:12px;
+font-weight:600;font-size:16px;margin-bottom:22px;}
 .note{font-size:14px;color:var(--ink-soft);margin:0 0 22px;}
 .help{border-top:1px solid var(--line);padding-top:18px;font-size:14px;color:var(--ink-soft);}
 .help a{color:var(--green-deep);}
@@ -39,9 +42,10 @@ font-weight:600;font-size:15px;margin-bottom:20px;}
   <p class="sub">Чек уже отправлен на почту, которую вы указали при оплате.</p>
   <div class="what">Ваш гайд: <b>Тяга к сладкому: не сила воли, а биохимия</b></div>
   <a class="btn" href="https://disk.yandex.ru/d/nV0-BnyBjObEiw" target="_blank" rel="noopener">Скачать материал</a>
-  <p class="note">Откроется Яндекс&nbsp;Диск, файл можно скачать или читать онлайн.
-  Сохраните эту страницу в закладки: ссылка бессрочная, файл доступен в любой момент.</p>
-  <a class="btn2" href="https://poke.petraprolife.ru/">Вернуться на сайт</a>
+  <a class="btn2" href="https://poke.petraprolife.ru/">← Вернуться на сайт</a>
+  <p class="note">Файл открывается в новой вкладке: скачайте его или читайте онлайн,
+  а эта страница останется здесь. Сохраните её в закладки - ссылка бессрочная,
+  материал доступен в любой момент.</p>
   <div class="help">
     Если файл не открылся или что-то пошло не так, напишите мне, и я пришлю материал лично:
     <a href="mailto:anna@petraprolife.ru">anna@petraprolife.ru</a> или <a href="https://t.me/petraprolife">Telegram</a>.
