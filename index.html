@@ -504,6 +504,7 @@
             <div class="t-kicker">Тест · 3 вопроса</div>
             <h3>Та же тарелка, разный эффект</h3>
             <p>Одному боул даёт лёгкость и энергию, а другого к вечеру пучит и клонит в сон. Дело не в еде, а в вашем типе пищеварения.</p>
+            <p>Тест показывает состояние на сегодня - то, что складывается последний месяц. Это не врождённый тип: картина меняется, и через месяц тест имеет смысл пройти заново.</p>
             <p class="t-mini">Собрано на реальном меню Poke Time</p>
             <button class="btn primary" style="width:fit-content" onclick="startTest()">Начать тест →</button>
           </div>
@@ -523,7 +524,7 @@
 
       <div class="screen" id="s-res">
         <div class="res">
-          <div class="rlabel">Ваш тип пищеварения</div>
+          <div class="rlabel">Ваш тип пищеварения сейчас</div>
           <h3 id="rName"></h3>
           <span class="ess"><span class="pip" id="rPip"></span><span id="rEss"></span></span>
           <p class="rwhy" id="rWhy"></p>
@@ -860,15 +861,18 @@ var GUIDES=[
     {q:"Что ближе всего про вас после еды?",opts:[
       {t:"f",txt:"Нет тяжести, встаю из-за стола легко"},
       {t:"s",txt:"Тяжесть и сонливость, тянет полежать"},
-      {t:"u",txt:"По-разному: аппетит и реакция скачут день ото дня"}]},
+      {t:"u",txt:"По-разному: аппетит и реакция скачут день ото дня"},
+      {t:"n",txt:"Ничего из этого - после еды чувствую себя ровно"}]},
     {q:"А это узнаёте у себя?",opts:[
       {t:"f",txt:"Часто хочу есть, при пропуске еды раздражаюсь"},
       {t:"s",txt:"К вечеру вздутие, живот «раздувает»"},
-      {t:"u",txt:"Вздутие приходит на нервах, вместе со стрессом"}]},
+      {t:"u",txt:"Вздутие приходит на нервах, вместе со стрессом"},
+      {t:"n",txt:"Ничего из этого - с животом всё спокойно"}]},
     {q:"И последнее: что вам знакомо?",opts:[
       {t:"f",txt:"Бывает изжога, ощущение, что «горит»"},
       {t:"s",txt:"Аппетит слабый или переменный, тяжесть держится долго"},
-      {t:"u",txt:"«Нервный живот»: всё реагирует на эмоции"}]}
+      {t:"u",txt:"«Нервный живот»: всё реагирует на эмоции"},
+      {t:"n",txt:"Ничего из этого - изжоги нет, аппетит ровный"}]}
   ];
   var RESULTS={
     f:{name:"Быстрый",color:"#D9603F",ess:"сильный огонь пищеварения",
@@ -882,7 +886,12 @@ var GUIDES=[
     u:{name:"Нестабильный",color:"#86709E",ess:"чувствительное к стрессу пищеварение",
       why:"Ваше пищеварение чувствительно к стрессу и режиму: то работает, то капризничает. Отсюда «нервный живот», непредсказуемое вздутие и скачки аппетита. Такому типу важнее всего тепло, регулярность и «заземляющая» еда.",
       plate:[["Основа","рис (не лист салата)"],["Протеин","лосось, цыплёнок или креветка"],["Соус","ореховый, унаги или сладкий чили"],["Топпинги","авокадо, творожный сыр, кукуруза, морковь, манго, чука (немного), помидор черри, вяленые томаты"],["Финиш","кунжут, кешью, тыквенные семечки, жареный лук"]],
-      less:"спайси-айоли и васаби, сырая красная капуста, огурец, редис, дайкон, халапеньо, маш, эдамаме: острое, сырое и «сухое» раскачивает и без того нестабильное пищеварение."}
+      less:"спайси-айоли и васаби, сырая красная капуста, огурец, редис, дайкон, халапеньо, маш, эдамаме: острое, сырое и «сухое» раскачивает и без того нестабильное пищеварение."},
+    n:{name:"Сбалансированный",color:"#2F7A63",ess:"ровное пищеварение без перекосов",
+      why:"Сейчас ваше пищеварение работает ровно: еда усваивается, тяжести и вздутия нет, аппетит предсказуемый. Значит, жёстких ограничений вам сегодня не нужно - выбирайте то, что нравится, и ориентируйтесь на самочувствие. Состояние меняется вместе с сезоном, режимом и нагрузкой, поэтому имеет смысл вернуться к тесту примерно через месяц.",
+      plate:[["Основа","любая: рис, киноа или лист салата"],["Протеин","любой из меню, по настроению"],["Соус","любой, но один: несколько сразу перегружают вкус"],["Топпинги","разные цвета и текстуры, овощей примерно половина тарелки"],["Финиш","семечки, орехи или микрозелень, по вкусу"]],
+      lessT:"На что смотреть",
+      less:"ровное пищеварение чаще сбивают не продукты, а спешка и переедание. Ешьте тёплое и свежее, не на бегу, и вставайте из-за стола чуть раньше, чем наелись, - этого обычно достаточно, чтобы удержать баланс."}
   };
   var idx=0, ans=[];
   function show(id){var s=document.querySelectorAll('#test .screen');for(var i=0;i<s.length;i++)s[i].classList.remove('active');document.getElementById(id).classList.add('active');}
@@ -891,8 +900,8 @@ var GUIDES=[
   function renderQ(){var Q=QUESTIONS[idx];document.getElementById('qcount').textContent='Вопрос '+(idx+1)+' из '+QUESTIONS.length;document.getElementById('qprog').style.width=((idx+1)/QUESTIONS.length*100)+'%';document.getElementById('qtext').textContent=Q.q;document.getElementById('qback').style.visibility=idx===0?'hidden':'visible';var b=document.getElementById('opts');b.innerHTML='';Q.opts.forEach(function(o){var el=document.createElement('button');el.className='opt';el.innerHTML='<span class="dot"></span><span>'+o.txt+'</span>';el.onclick=function(){pick(o.t);};b.appendChild(el);});}
   function pick(t){ans[idx]=t;if(idx<QUESTIONS.length-1){idx++;renderQ();scrollTest();}else finishTest();}
   function backQ(){if(idx>0){idx--;renderQ();}}
-  function finishTest(){var c={f:0,s:0,u:0};ans.forEach(function(a){c[a]++;});var order=['f','s','u'];var best=order[0];order.forEach(function(k){if(c[k]>c[best])best=k;});var mx=c[best];var tie=order.filter(function(k){return c[k]===mx;});if(tie.length>1)best=ans[0];renderRes(best);show('s-res');scrollTest();}
-  function renderRes(t){try{ptSetType(t);bldRender();}catch(e){}var R=RESULTS[t];document.getElementById('rName').textContent=R.name;document.getElementById('rPip').style.background=R.color;document.getElementById('rEss').textContent=R.ess;document.getElementById('rWhy').textContent=R.why;var p=document.getElementById('rPlate');p.innerHTML='';R.plate.forEach(function(row){var d=document.createElement('div');d.className='prow2';d.innerHTML='<div class="k">'+row[0]+'</div><div class="v">'+row[1]+'</div>';p.appendChild(d);});document.getElementById('rLess').innerHTML='<b>Сегодня поменьше:</b> '+R.less;}
+  function finishTest(){var c={f:0,s:0,u:0,n:0};ans.forEach(function(a){c[a]++;});var order=['f','s','u'];if(c.f+c.s+c.u===0){renderRes('n');show('s-res');scrollTest();return;}var best=order[0];order.forEach(function(k){if(c[k]>c[best])best=k;});var mx=c[best];var tie=order.filter(function(k){return c[k]===mx;});if(tie.length>1){var first=null;ans.forEach(function(a){if(first===null&&a!=='n')first=a;});best=first||best;}renderRes(best);show('s-res');scrollTest();}
+  function renderRes(t){try{ptSetType(t);bldRender();}catch(e){}var R=RESULTS[t];document.getElementById('rName').textContent=R.name;document.getElementById('rPip').style.background=R.color;document.getElementById('rEss').textContent=R.ess;document.getElementById('rWhy').textContent=R.why;var p=document.getElementById('rPlate');p.innerHTML='';R.plate.forEach(function(row){var d=document.createElement('div');d.className='prow2';d.innerHTML='<div class="k">'+row[0]+'</div><div class="v">'+row[1]+'</div>';p.appendChild(d);});document.getElementById('rLess').innerHTML='<b>'+(R.lessT||'Сегодня поменьше')+':</b> '+R.less;}
   function restartTest(){show('s-intro');scrollTest();}
 
   /* ---- interactive / 3D effects ---- */
@@ -1012,13 +1021,14 @@ function bldRender(){
   var host=document.getElementById('bldGroups');
   if(!host)return;
   var t=ptType();
+  var rate=(t&&t!=='n')?t:null;
   document.getElementById('bldNeed').classList.toggle('off',!!t);
   host.innerHTML=MENU.map(function(g){
     return '<div class="grp2"><div class="gh"><b>'+g.label+'</b><i>'+g.note+'</i></div>'
       +'<div class="chipsr">'+g.items.map(function(it,i){
-        var sc=t?it[1][t]:0;
-        var cls='ing'+(t?' rated':'');
-        var mk=t?(sc>0?'✓':(sc<0?'•':'')):'';
+        var sc=rate?it[1][rate]:0;
+        var cls='ing'+(rate?' rated':'');
+        var mk=rate?(sc>0?'✓':(sc<0?'•':'')):'';
         return '<button class="'+cls+'" data-g="'+g.key+'" data-i="'+i+'">'
           +'<span>'+it[0]+'</span><span class="mk">'+mk+'</span></button>';
       }).join('')+'</div></div>';
@@ -1041,12 +1051,13 @@ function bldReset(){MENU.forEach(function(g){picked[g.key]=[];});bldPaint();}
 
 function bldPaint(){
   var t=ptType(), tot=0, good=0, bad=0, badNames=[];
+  var rate=(t&&t!=='n')?t:null;
   MENU.forEach(function(g){
     g.items.forEach(function(it,i){
       var b=document.querySelector('.ing[data-g="'+g.key+'"][data-i="'+i+'"]');
       if(!b)return;
       var on=picked[g.key].indexOf(i)>=0;
-      var sc=t?it[1][t]:0;
+      var sc=rate?it[1][rate]:0;
       b.classList.toggle('on',on);
       b.classList.toggle('good',on&&sc>0);
       b.classList.toggle('bad',on&&sc<0);
@@ -1060,15 +1071,19 @@ function bldPaint(){
     ring.style.background='conic-gradient(#2F7D5B 0deg,#E6EDE9 0deg)';
     pct.textContent='-';
     title.textContent='Отмечайте, что положили';
-    sub.textContent=t?'Соберите тарелку - оценю сочетание для вашего типа.':'Пройдите тест выше, и я начну подсказывать по каждому ингредиенту.';
+    sub.textContent=rate?'Соберите тарелку - оценю сочетание для вашего типа.'
+      :(t==='n'?'Сегодня пищеварение ровное: собирайте по вкусу, ограничений нет.'
+      :'Пройдите тест выше, и я начну подсказывать по каждому ингредиенту.');
     tip.classList.remove('on');
     return;
   }
-  if(!t){
-    ring.style.background='conic-gradient(#C9D4CE 0deg,#E6EDE9 0deg)';
+  if(!rate){
+    ring.style.background='conic-gradient('+(t==='n'?'#2F7A63':'#C9D4CE')+' 0deg,#E6EDE9 0deg)';
     pct.textContent=tot;
     title.textContent='Ингредиентов в тарелке: '+tot;
-    sub.textContent='Чтобы я сказала, подходит ли это вам, нужен ваш тип - тест занимает 30 секунд.';
+    sub.textContent=(t==='n')
+      ?'Пищеварение сейчас ровное, поэтому спорных ингредиентов для вас нет. Ориентир простой: половина тарелки - овощи, и не переедайте.'
+      :'Чтобы я сказала, подходит ли это вам, нужен ваш тип - тест занимает 30 секунд.';
     tip.classList.remove('on');
     return;
   }
