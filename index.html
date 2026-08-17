@@ -107,10 +107,14 @@
   .q-text{font-size:clamp(20px,3vw,25px);font-weight:730;letter-spacing:-.01em;line-height:1.2;margin:0 0 20px;text-wrap:balance;}
   .opts{display:flex;flex-direction:column;gap:11px;}
   .opt{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1.6px solid var(--line);border-radius:14px;padding:16px 17px;font-size:15.5px;color:var(--ink);cursor:pointer;font-family:inherit;line-height:1.4;box-shadow:var(--shadow-sm);transition:border-color .16s,transform .12s;}
-  .opt:hover{border-color:var(--green);transform:translateY(-1px);}
+  /* hover только для мыши: на тач-экране он залипает на месте тапа, и следующий
+     вопрос отрисовывался с уже «подсвеченным» ответом под пальцем */
+  @media (hover:hover) and (pointer:fine){
+    .opt:hover{border-color:var(--green);transform:translateY(-1px);}
+  }
   .opt:focus-visible{outline:3px solid var(--coral);outline-offset:2px;}
   .opt .dot{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);}
-  .opt:hover .dot{border-color:var(--green);}
+  @media (hover:hover) and (pointer:fine){ .opt:hover .dot{border-color:var(--green);} }
   .q-back{margin-top:20px;background:none;border:none;color:var(--ink-faint);font-size:14px;cursor:pointer;font-family:inherit;}
   .q-back:hover{color:var(--ink-soft);}
   /* result */
@@ -275,7 +279,7 @@
 .ing{border:1px solid rgba(34,48,42,.16);background:#fff;border-radius:999px;
   padding:7px 13px;font-size:13.5px;cursor:pointer;font-family:inherit;color:inherit;
   display:inline-flex;align-items:center;gap:6px;transition:.16s;line-height:1.2}
-.ing:hover{border-color:rgba(34,48,42,.4)}
+@media (hover:hover) and (pointer:fine){.ing:hover{border-color:rgba(34,48,42,.4)}}
 .ing .mk{font-size:11px;opacity:0;transition:.16s}
 .ing.rated .mk{opacity:1}
 .ing.on{background:#3C7A47;color:#fff;border-color:transparent}
@@ -326,7 +330,7 @@
 .mbtns{display:flex;gap:10px;flex-wrap:wrap}
 .mbtn{flex:1;min-width:130px;border:1px solid rgba(34,48,42,.18);background:#fff;border-radius:14px;
   padding:14px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;color:inherit;transition:.16s}
-.mbtn:hover{border-color:rgba(34,48,42,.45)}
+@media (hover:hover) and (pointer:fine){.mbtn:hover{border-color:rgba(34,48,42,.45)}}
 .mbtn:focus-visible{outline:2px solid var(--coral,#E4734F);outline-offset:2px}
 .mans{display:none;margin-top:18px;border-top:1px dashed rgba(34,48,42,.18);padding-top:18px}
 .mans.on{display:block}
@@ -858,21 +862,21 @@ var GUIDES=[
   })();
 
   var QUESTIONS=[
-    {q:"Что ближе всего про вас после еды?",opts:[
-      {t:"f",txt:"Нет тяжести, встаю из-за стола легко"},
-      {t:"s",txt:"Тяжесть и сонливость, тянет полежать"},
-      {t:"u",txt:"По-разному: аппетит и реакция скачут день ото дня"},
-      {t:"n",txt:"Ничего из этого - после еды чувствую себя ровно"}]},
-    {q:"А это узнаёте у себя?",opts:[
-      {t:"f",txt:"Часто хочу есть, при пропуске еды раздражаюсь"},
-      {t:"s",txt:"К вечеру вздутие, живот «раздувает»"},
-      {t:"u",txt:"Вздутие приходит на нервах, вместе со стрессом"},
-      {t:"n",txt:"Ничего из этого - с животом всё спокойно"}]},
-    {q:"И последнее: что вам знакомо?",opts:[
-      {t:"f",txt:"Бывает изжога, ощущение, что «горит»"},
-      {t:"s",txt:"Аппетит слабый или переменный, тяжесть держится долго"},
-      {t:"u",txt:"«Нервный живот»: всё реагирует на эмоции"},
-      {t:"n",txt:"Ничего из этого - изжоги нет, аппетит ровный"}]}
+    {q:"Как у вас с аппетитом?",opts:[
+      {t:"f",txt:"Быстро становлюсь голодной и плохо переношу пропуск еды"},
+      {t:"s",txt:"Аппетит слабый, ем скорее потому, что надо"},
+      {t:"u",txt:"То голод, то совсем нет аппетита - бывает, забываю поесть"},
+      {t:"n",txt:"Ничего из этого - аппетит ровный"}]},
+    {q:"Бывает ли вздутие и когда?",opts:[
+      {t:"f",txt:"Появляется быстро, вскоре после еды"},
+      {t:"s",txt:"Через два-три часа и позже, еда будто задерживается"},
+      {t:"u",txt:"Зависит от стресса и от сырой еды"},
+      {t:"n",txt:"Ничего из этого - вздутия не бывает"}]},
+    {q:"Что чаще всего чувствуете после еды?",opts:[
+      {t:"f",txt:"Прилив энергии или лёгкое тепло"},
+      {t:"s",txt:"Хочется прилечь"},
+      {t:"u",txt:"По-разному: зависит от того, устала я или нервничала"},
+      {t:"n",txt:"Ничего из этого - чувствую себя ровно"}]}
   ];
   var RESULTS={
     f:{name:"Быстрый",color:"#D9603F",ess:"сильный огонь пищеварения",
@@ -893,6 +897,10 @@ var GUIDES=[
       lessT:"На что смотреть",
       less:"ровное пищеварение чаще сбивают не продукты, а спешка и переедание. Ешьте тёплое и свежее, не на бегу, и вставайте из-за стола чуть раньше, чем наелись, - этого обычно достаточно, чтобы удержать баланс."}
   };
+  var TIEQ={q:"Почти готово. Как обычно работает кишечник?",opts:[
+    {t:"f",txt:"Часто тянет в туалет вскоре после еды"},
+    {t:"s",txt:"В целом регулярно, изредка бывают запоры"},
+    {t:"u",txt:"Нерегулярно, случаются запоры, с тенденцией к овечьему калу"}]};
   var idx=0, ans=[];
   function show(id){var s=document.querySelectorAll('#test .screen');for(var i=0;i<s.length;i++)s[i].classList.remove('active');document.getElementById(id).classList.add('active');}
   function scrollTest(){document.getElementById('test').scrollIntoView({behavior:'smooth',block:'start'});}
@@ -900,7 +908,8 @@ var GUIDES=[
   function renderQ(){var Q=QUESTIONS[idx];document.getElementById('qcount').textContent='Вопрос '+(idx+1)+' из '+QUESTIONS.length;document.getElementById('qprog').style.width=((idx+1)/QUESTIONS.length*100)+'%';document.getElementById('qtext').textContent=Q.q;document.getElementById('qback').style.visibility=idx===0?'hidden':'visible';var b=document.getElementById('opts');b.innerHTML='';Q.opts.forEach(function(o){var el=document.createElement('button');el.className='opt';el.innerHTML='<span class="dot"></span><span>'+o.txt+'</span>';el.onclick=function(){pick(o.t);};b.appendChild(el);});}
   function pick(t){ans[idx]=t;if(idx<QUESTIONS.length-1){idx++;renderQ();scrollTest();}else finishTest();}
   function backQ(){if(idx>0){idx--;renderQ();}}
-  function finishTest(){var c={f:0,s:0,u:0,n:0};ans.forEach(function(a){c[a]++;});var order=['f','s','u'];if(c.f+c.s+c.u===0){renderRes('n');show('s-res');scrollTest();return;}var best=order[0];order.forEach(function(k){if(c[k]>c[best])best=k;});var mx=c[best];var tie=order.filter(function(k){return c[k]===mx;});if(tie.length>1){var first=null;ans.forEach(function(a){if(first===null&&a!=='n')first=a;});best=first||best;}renderRes(best);show('s-res');scrollTest();}
+  function finishTest(){var c={f:0,s:0,u:0,n:0};ans.forEach(function(a){c[a]++;});var order=['f','s','u'];if(c.f+c.s+c.u===0){renderRes('n');show('s-res');scrollTest();return;}var mx=0;order.forEach(function(k){if(c[k]>mx)mx=c[k];});var tie=order.filter(function(k){return c[k]===mx;});if(tie.length>1){renderTie(tie);return;}renderRes(tie[0]);show('s-res');scrollTest();}
+  function renderTie(cands){document.getElementById('qcount').textContent='Уточняющий вопрос';document.getElementById('qprog').style.width='100%';document.getElementById('qtext').textContent=TIEQ.q;document.getElementById('qback').style.visibility='hidden';var b=document.getElementById('opts');b.innerHTML='';TIEQ.opts.filter(function(o){return cands.indexOf(o.t)>=0;}).forEach(function(o){var el=document.createElement('button');el.className='opt';el.innerHTML='<span class="dot"></span><span>'+o.txt+'</span>';el.onclick=function(){renderRes(o.t);show('s-res');scrollTest();};b.appendChild(el);});show('s-quiz');scrollTest();}
   function renderRes(t){try{ptSetType(t);bldRender();}catch(e){}var R=RESULTS[t];document.getElementById('rName').textContent=R.name;document.getElementById('rPip').style.background=R.color;document.getElementById('rEss').textContent=R.ess;document.getElementById('rWhy').textContent=R.why;var p=document.getElementById('rPlate');p.innerHTML='';R.plate.forEach(function(row){var d=document.createElement('div');d.className='prow2';d.innerHTML='<div class="k">'+row[0]+'</div><div class="v">'+row[1]+'</div>';p.appendChild(d);});document.getElementById('rLess').innerHTML='<b>'+(R.lessT||'Сегодня поменьше')+':</b> '+R.less;}
   function restartTest(){show('s-intro');scrollTest();}
 
